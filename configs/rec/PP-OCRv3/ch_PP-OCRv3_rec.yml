@@ -8,8 +8,9 @@ Global:
   save_epoch_step: 3
   eval_batch_step: [0, 2000]
   cal_metric_during_train: true
-  pretrained_model:
-  checkpoints:
+  pretrained_model:  ./pretrain_models/ch_PP-OCRv3_rec_train
+#  pretrain_weights: ./pretrain_models/ch_PP-OCRv3_rec_train
+  checkpoints: ./output/rec_ppocr_v3/latest
   save_inference_dir:
   use_visualdl: false
   infer_img: doc/imgs_words/ch/word_1.jpg
@@ -76,10 +77,10 @@ Metric:
 Train:
   dataset:
     name: SimpleDataSet
-    data_dir: ./train_data/
-    ext_op_transform_idx: 1
+    data_dir: C:\Users\Gatsby\datasets\rec_rotate_ajust_data\
     label_file_list:
-    - ./train_data/train_list.txt
+      - C:/Users/Gatsby/datasets/rec_rotate_ajust_data/rec_train_label.txt
+    ext_op_transform_idx: 1
     transforms:
     - DecodeImage:
         img_mode: BGR
@@ -108,9 +109,9 @@ Train:
 Eval:
   dataset:
     name: SimpleDataSet
-    data_dir: ./train_data
+    data_dir: C:/Users/Gatsby/datasets/rec_rotate_ajust_data/
     label_file_list:
-    - ./train_data/val_list.txt
+      - C:/Users/Gatsby/datasets/rec_rotate_ajust_data/rec_test_label.txt
     transforms:
     - DecodeImage:
         img_mode: BGR
