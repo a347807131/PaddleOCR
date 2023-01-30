@@ -30,9 +30,10 @@ if __name__ == '__main__':
 
     args = utility.parse_args()
     # args.image_dir = "C:/Users/Gatsby/datasets/det/1"
-    args.image_dir = "C:/Users/Gatsby/datasets/1948-02"
+    args.image_dir = "C:/Users/Gatsby/datasets/det/1"
 
-    args.det_model_dir = 'output/ch_PP-OCR_V3_det'
+    # args.det_model_dir = 'output/ch_PP-OCR_V3_det'
+    args.det_model_dir = 'inference/det_model'
 
     args.draw_img_save_dir = './output/savedResult'
     # args.pretrained_model = "pretrain_models/ch_PP-OCRv3_det_distill_train/best_accuracy"
