@@ -12,7 +12,7 @@ def img_rec(book_id, img_dir, drop_score, det_dir, rec_dir):
     args.draw_img_save_dir = img_dir+'/ocr_data'
     args.image_dir = img_dir
     # 更改字典路径: 使用自己训练的识别模型时需要添加下面一条代码
-    # args.rec_char_dict_path = 'ppocr/utils/my_dict.txt'
+    args.rec_char_dict_path = './ppocr/utils/my_dict.txt'
     args.det_model_dir = det_dir
     args.rec_model_dir = rec_dir
     main(args)
@@ -20,7 +20,7 @@ def img_rec(book_id, img_dir, drop_score, det_dir, rec_dir):
 
 # 排序识别后的文本行内容，方便计算准确率
 def sortRecResult(root, filename):
-    with open(root+'ocr_data/'+filename, 'r', encoding='utf-8') as fp:
+    with open(root+'/ocr_data/'+filename, 'r', encoding='utf-8') as fp:
         data = fp.readlines()
     names = []
     texts = []
@@ -65,13 +65,14 @@ def cal_accuracy(y_path, pred_path):
 
 
 if __name__=='__main__':
-    det_dir = 'ppstructure/inference/picodet_lcnet_x1_0_layout_infer/'
-    rec_dir = 'output/v3_chinese_cht_mobile/inference'
+    det_dir = 'inference/det_model'
+    rec_dir = 'inference/rec_model'
     thresh = 0.5
     book_id = '0001'
-    img_rec(book_id, './testset', thresh, det_dir, rec_dir)
-    sortRecResult('./testset/', book_id+'.txt')
-    acc = cal_accuracy('./testset/testimg.txt', './testset/test_lines.txt')
+    img_dir="C:/Users/Gatsby/datasets/det/1"
+    img_rec(book_id, img_dir, thresh, det_dir, rec_dir)
+    sortRecResult(img_dir, book_id+'.txt')
+    acc = cal_accuracy(img_dir+'/testimg.txt', img_dir+'/test_lines.txt')
     if not os.path.exists('./result/'):
         os.makedirs('./result/')
     with open('./result/result.txt', 'a', encoding='utf-8') as fp:

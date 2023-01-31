@@ -9,7 +9,7 @@ __pycache__/
 
 inference/
 inference_results/
-output/
+#output/
 train_data/
 log/
 *.DS_Store
@@ -35,3 +35,9 @@ test_tipc/web/node_modules/
 
 /pretrain_models
 !/output/**/*.yml
+*.pdopt
+*.pdparams
+*.states
+*.pdiparams
+*.info
+*.pdmodel
