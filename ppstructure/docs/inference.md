@@ -31,7 +31,7 @@ cd ..
 <a name="1.1"></a>
 ### 1.1 版面分析+表格识别
 ```bash
-python3 predict_system.py --det_model_dir=inference/ch_PP-OCRv3_det_infer \
+python3 my_predict_system.py --det_model_dir=inference/ch_PP-OCRv3_det_infer \
                           --rec_model_dir=inference/ch_PP-OCRv3_rec_infer \
                           --table_model_dir=inference/ch_ppstructure_mobile_v2.0_SLANet_infer \
                           --layout_model_dir=inference/picodet_lcnet_x1_0_layout_infer \
@@ -46,7 +46,7 @@ python3 predict_system.py --det_model_dir=inference/ch_PP-OCRv3_det_infer \
 <a name="1.2"></a>
 ### 1.2 版面分析
 ```bash
-python3 predict_system.py --layout_model_dir=inference/picodet_lcnet_x1_0_layout_infer \
+python3 my_predict_system.py --layout_model_dir=inference/picodet_lcnet_x1_0_layout_infer \
                           --image_dir=./docs/table/1.png \
                           --output=../output \
                           --table=false \
@@ -57,7 +57,7 @@ python3 predict_system.py --layout_model_dir=inference/picodet_lcnet_x1_0_layout
 <a name="1.3"></a>
 ### 1.3 表格识别
 ```bash
-python3 predict_system.py --det_model_dir=inference/ch_PP-OCRv3_det_infer \
+python3 my_predict_system.py --det_model_dir=inference/ch_PP-OCRv3_det_infer \
                           --rec_model_dir=inference/ch_PP-OCRv3_rec_infer \
                           --table_model_dir=inference/ch_ppstructure_mobile_v2.0_SLANet_infer \
                           --image_dir=./docs/table/table.jpg \
@@ -81,7 +81,7 @@ mkdir inference && cd inference
 # 下载SER XFUND 模型并解压
 wget https://paddleocr.bj.bcebos.com/ppstructure/models/vi_layoutxlm/ser_vi_layoutxlm_xfund_infer.tar && tar -xf ser_vi_layoutxlm_xfund_infer.tar
 cd ..
-python3 predict_system.py \
+python3 my_predict_system.py \
   --kie_algorithm=LayoutXLM \
   --ser_model_dir=./inference/ser_vi_layoutxlm_xfund_infer \
   --image_dir=./docs/kie/input/zh_val_42.jpg \
@@ -104,7 +104,7 @@ wget https://paddleocr.bj.bcebos.com/ppstructure/models/vi_layoutxlm/ser_vi_layo
 wget https://paddleocr.bj.bcebos.com/ppstructure/models/vi_layoutxlm/re_vi_layoutxlm_xfund_infer.tar && tar -xf re_vi_layoutxlm_xfund_infer.tar
 cd ..
 
-python3 predict_system.py \
+python3 my_predict_system.py \
   --kie_algorithm=LayoutXLM \
   --re_model_dir=./inference/re_vi_layoutxlm_xfund_infer \
   --ser_model_dir=./inference/ser_vi_layoutxlm_xfund_infer \

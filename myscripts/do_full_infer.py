@@ -1,26 +1,25 @@
-from tools.infer.predict_system import main
+from tools.infer import predict_system
 from tools.infer.utility import parse_args
 import numpy as np
 import os
 
 
 # 识别文字
-def img_rec(book_id, img_dir, drop_score, det_dir, rec_dir):
+def img_rec( img_dir, drop_score, det_dir, rec_dir):
     args = parse_args()
     args.drop_score = drop_score
-    args.book_id = book_id
-    args.draw_img_save_dir = img_dir+'/ocr_data'
+    args.draw_img_save_dir = "output/savedResult"
     args.image_dir = img_dir
     # 更改字典路径: 使用自己训练的识别模型时需要添加下面一条代码
     args.rec_char_dict_path = './ppocr/utils/my_dict.txt'
     args.det_model_dir = det_dir
     args.rec_model_dir = rec_dir
-    main(args)
+    predict_system.main(args)
 
 
 # 排序识别后的文本行内容，方便计算准确率
 def sortRecResult(root, filename):
-    with open(root+'/ocr_data/'+filename, 'r', encoding='utf-8') as fp:
+    with open(root + '/ocr_data/' + filename, 'r', encoding='utf-8') as fp:
         data = fp.readlines()
     names = []
     texts = []
@@ -36,9 +35,9 @@ def sortRecResult(root, filename):
         ind = int(img_info[0].split('.')[0])
         indexs.append(ind)
     sort_inds = np.argsort(indexs)
-    with open(root+'test_lines.txt', 'w', encoding='utf-8')as fp:
+    with open(root + 'test_lines.txt', 'w', encoding='utf-8') as fp:
         for idx in sort_inds:
-            fp.write(names[idx]+'\t'+texts[idx]+'\n')
+            fp.write(names[idx] + '\t' + texts[idx] + '\n')
 
 
 def cal_accuracy(y_path, pred_path):
@@ -60,24 +59,16 @@ def cal_accuracy(y_path, pred_path):
                 correct += 1
             j += 1
     print(total, correct)
-    print('Accuracy:', correct/total)
-    return correct/total
+    print('Accuracy:', correct / total)
+    return correct / total
 
 
-if __name__=='__main__':
+if __name__ == '__main__':
     det_dir = 'inference/det_model'
     rec_dir = 'inference/rec_model'
-    thresh = 0.5
-    book_id = '0001'
-    img_dir="C:/Users/Gatsby/datasets/det/1"
-    img_rec(book_id, img_dir, thresh, det_dir, rec_dir)
-    sortRecResult(img_dir, book_id+'.txt')
-    acc = cal_accuracy(img_dir+'/testimg.txt', img_dir+'/test_lines.txt')
-    if not os.path.exists('./result/'):
-        os.makedirs('./result/')
-    with open('./result/result.txt', 'a', encoding='utf-8') as fp:
-        fp.write('box_thresh='+str(thresh)+'\tAccuracy='+str(acc)+'\tdet_dir='+det_dir+'\trec_dir='+rec_dir+'\n')
-
+    drop_score = 0.5
+    img_dir = "C:/Users/Gatsby/datasets/det/1"
+    img_rec(img_dir, drop_score, det_dir, rec_dir)
 
     # python
     # tools / train.py
@@ -94,3 +85,24 @@ if __name__=='__main__':
     # configs / det / det_mv3_db.yml - o
     # Global.pretrained_model = "./output/det_db/best_accuracy"
     # Global.save_inference_dir = "./output/det_db_inference/"
+
+
+from tools import infer_det
+from tools.infer import predict_system, predict_det, utility
+from tools.infer import predict_system
+from tools.infer.predict_system import TextSystem
+from tools.infer.utility import parse_args
+import numpy as np
+import os
+
+# if __name__ == '__main__':
+#
+#     args = utility.parse_args()
+#     args.draw_img_save_dir = './output/savedResult'
+#     # 更改字典路径: 使用自己训练的识别模型时需要添加下面一条代码
+#     args.rec_char_dict_path = 'ppocr/utils/dict/chinese_cht_dict.txt'
+#     args.det_model_dir = 'inference/det_model'
+#     args.rec_model_dir = 'output/v3_chinese_cht_mobile/inference'
+#     args.image_dir = "C:/Users/Gatsby/datasets/det/1"
+#     text_sys = TextSystem(args)
+#     pass

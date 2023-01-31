@@ -116,7 +116,7 @@ paddleocr --image_dir=ppstructure/recovery/UnrealText.pdf --type=structure --rec
 Command line:
 
 ```bash
-python3 predict_system.py \
+python3 my_predict_system.py \
     --image_dir=ppstructure/recovery/UnrealText.pdf \
     --recovery=True \
     --use_pdf2docx_api=True \
@@ -171,7 +171,7 @@ If input is Chinese document，download Chinese models:
 
 
 ```bash
-python3 predict_system.py \
+python3 my_predict_system.py \
     --image_dir=./docs/table/1.png \
     --det_model_dir=inference/en_PP-OCRv3_det_infer \
     --rec_model_dir=inference/en_PP-OCRv3_rec_infer \

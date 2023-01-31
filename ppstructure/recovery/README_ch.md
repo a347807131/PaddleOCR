@@ -112,7 +112,7 @@ paddleocr --image_dir=ppstructure/recovery/UnrealText.pdf --type=structure --rec
 通过命令行的方式：
 
 ```bash
-python3 predict_system.py \
+python3 my_predict_system.py \
     --image_dir=ppstructure/recovery/UnrealText.pdf \
     --recovery=True \
     --use_pdf2docx_api=True \
@@ -180,7 +180,7 @@ cd ..
 使用下载的模型恢复给定文档的版面，以英文模型为例，执行如下命令：
 
 ```bash
-python3 predict_system.py \
+python3 my_predict_system.py \
     --image_dir=./docs/table/1.png \
     --det_model_dir=inference/en_PP-OCRv3_det_infer \
     --rec_model_dir=inference/en_PP-OCRv3_rec_infer \
