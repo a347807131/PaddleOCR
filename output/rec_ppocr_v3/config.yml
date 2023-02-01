@@ -10,7 +10,7 @@ Global:
   - 0
   - 2000
   cal_metric_during_train: true
-  pretrained_model: ./pretrain_models/ch_PP-OCRv3_rec_train/best_accuracy
+  pretrained_model: ./pretrain_models/ch_PP-OCRv3_rec_train
   checkpoints: ./output/rec_ppocr_v3/latest
   save_inference_dir: null
   use_visualdl: false
@@ -104,7 +104,7 @@ Train:
         - valid_ratio
   loader:
     shuffle: true
-    batch_size_per_card: 64
+    batch_size_per_card: 128
     drop_last: true
     num_workers: 4
 Eval:
@@ -133,6 +133,6 @@ Eval:
   loader:
     shuffle: false
     drop_last: false
-    batch_size_per_card: 64
+    batch_size_per_card: 128
     num_workers: 4
 profiler_options: null

@@ -5,17 +5,18 @@ import os
 
 
 if __name__ == '__main__':
-    det_dir = 'inference/det_model'
+    det_dir = './pretrain_models/det_model'
     rec_dir = './pretrain_models/chinese_cht_PP-OCRv3_rec_train/inference'
-    drop_score = 0.5
+    # drop_score = 0.6
     img_dir = "D:/datasets/chengdu/1"
 
     args = parse_args()
-    args.drop_score = drop_score
+    # args.drop_score = drop_score
     args.draw_img_save_dir = "output/savedResult"
     args.image_dir = img_dir
     # 更改字典路径: 使用自己训练的识别模型时需要添加下面一条代码
     args.rec_char_dict_path = 'ppocr/utils/dict/chinese_cht_dict.txt'
+    # args.rec_char_dict_path = 'ppocr/utils/my_dict.txt'
     args.det_model_dir = det_dir
     args.rec_model_dir = rec_dir
     predict_system.main(args)

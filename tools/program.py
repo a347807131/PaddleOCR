@@ -19,6 +19,8 @@ from __future__ import print_function
 import os
 import sys
 import platform
+
+import wandb
 import yaml
 import time
 import datetime
@@ -36,6 +38,20 @@ from ppocr.utils.logging import get_logger
 from ppocr.utils.loggers import VDLLogger, WandbLogger, Loggers
 from ppocr.utils import profiler
 from ppocr.data import build_dataloader
+
+import wandb
+import random
+
+# start a new wandb run to track this script
+wandb.init(
+    # set the wandb project where this run will be logged
+    project="paddle-ocr",
+
+    # track hyperparameters and run metadata
+    config={
+        "model_name": "chinese_cht_PP-OCRv3_rec_train"
+    }
+)
 
 
 class ArgsParser(ArgumentParser):
@@ -101,7 +117,7 @@ def merge_config(config, opts):
         else:
             sub_keys = key.split('.')
             assert (
-                sub_keys[0] in config
+                    sub_keys[0] in config
             ), "the sub_keys can only be one of global_config: {}, but get: " \
                "{}, please check your running command".format(
                 config.keys(), sub_keys[0])
@@ -342,22 +358,31 @@ def train(config,
                     metrics=train_stats.get(), prefix="TRAIN", step=global_step)
 
             if dist.get_rank() == 0 and (
-                (global_step > 0 and global_step % print_batch_step == 0) or
-                (idx >= len(train_dataloader) - 1)):
+                    (global_step > 0 and global_step % print_batch_step == 0) or
+                    (idx >= len(train_dataloader) - 1)):
                 logs = train_stats.log()
 
                 eta_sec = ((epoch_num + 1 - epoch) * \
-                    len(train_dataloader) - idx - 1) * eta_meter.avg
+                           len(train_dataloader) - idx - 1) * eta_meter.avg
                 eta_sec_format = str(datetime.timedelta(seconds=int(eta_sec)))
                 strs = 'epoch: [{}/{}], global_step: {}, {}, avg_reader_cost: ' \
-                    '{:.5f} s, avg_batch_cost: {:.5f} s, avg_samples: {}, ' \
-                    'ips: {:.5f} samples/s, eta: {}'.format(
+                       '{:.5f} s, avg_batch_cost: {:.5f} s, avg_samples: {}, ' \
+                       'ips: {:.5f} samples/s, eta: {}'.format(
                     epoch, epoch_num, global_step, logs,
                     train_reader_cost / print_batch_step,
                     train_batch_cost / print_batch_step,
                     total_samples / print_batch_step,
                     total_samples / train_batch_cost, eta_sec_format)
                 logger.info(strs)
+
+                ## added by gatsby
+                if logs is not None:
+                    str_splits = strs.split(',')
+                    state_dict = {}
+                    for split in str_splits:
+                        kv = split.split(':')
+                        if len(kv) == 2: state_dict[kv[0]] = kv[1]
+                    wandb.log(state_dict)
 
                 total_samples = 0
                 train_reader_cost = 0.0
@@ -393,7 +418,7 @@ def train(config,
                         metrics=cur_metric, prefix="EVAL", step=global_step)
 
                 if cur_metric[main_indicator] >= best_model_dict[
-                        main_indicator]:
+                    main_indicator]:
                     best_model_dict.update(cur_metric)
                     best_model_dict['best_epoch'] = epoch
                     save_model(
@@ -416,7 +441,7 @@ def train(config,
                     log_writer.log_metrics(
                         metrics={
                             "best_{}".format(main_indicator):
-                            best_model_dict[main_indicator]
+                                best_model_dict[main_indicator]
                         },
                         prefix="EVAL",
                         step=global_step)
@@ -576,8 +601,8 @@ def update_center(char_center, post_result, preds):
                 index = logit[idx_time]
                 if index in char_center.keys():
                     char_center[index][0] = (
-                        char_center[index][0] * char_center[index][1] +
-                        feat[idx_time]) / (char_center[index][1] + 1)
+                                                    char_center[index][0] * char_center[index][1] +
+                                                    feat[idx_time]) / (char_center[index][1] + 1)
                     char_center[index][1] += 1
                 else:
                     char_center[index] = [feat[idx_time], 1]
@@ -600,7 +625,7 @@ def get_center(model, eval_dataloader, post_process_class):
         # Obtain usable results from post-processing methods
         post_result = post_process_class(preds, batch[1])
 
-        #update char_center
+        # update char_center
         char_center = update_center(char_center, post_result, preds)
         pbar.update(1)
 
@@ -669,7 +694,7 @@ def preprocess(is_train=False):
         log_writer = VDLLogger(vdl_writer_path)
         loggers.append(log_writer)
     if ('use_wandb' in config['Global'] and
-            config['Global']['use_wandb']) or 'wandb' in config:
+        config['Global']['use_wandb']) or 'wandb' in config:
         save_dir = config['Global']['save_model_dir']
         wandb_writer_path = "{}/wandb".format(save_dir)
         if "wandb" in config:

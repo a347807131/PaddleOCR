@@ -5,14 +5,13 @@ Global:
   log_smooth_window: 20
   print_batch_step: 10
   save_model_dir: ./output/v3_chinese_cht_mobile
-  save_epoch_step: 3
+  save_epoch_step: 10
   eval_batch_step:
   - 0
   - 2000
   cal_metric_during_train: true
-  pretrained_model: ./pretrain_models/chinese_cht_PP-OCRv3_rec_train/best_accuracy
-  checkpoints: ./output/v3_chinese_cht_mobile/latest
-  save_inference_dir: ./output/v3_chinese_cht_mobile/inference/
+  pretrained_model: ./pretrain_models/chinese_cht_PP-OCRv3_rec_train/inference/best_accuracy
+  save_inference_dir: ./pretrain_models/chinese_cht_PP-OCRv3_rec_train/inference/
   use_visualdl: false
   infer_img: doc/imgs_words/ch/word_1.jpg
   character_dict_path: ppocr/utils/dict/chinese_cht_dict.txt
@@ -73,9 +72,9 @@ Train:
   dataset:
     name: SimpleDataSet
     ext_op_transform_idx: 1
-    data_dir: C:\Users\Gatsby\datasets\rec_rotate_ajust_data\
+    data_dir: D:\taged\tagged_vertical_3.6w\train
     label_file_list:
-    - C:/Users/Gatsby/datasets/rec_rotate_ajust_data/rec_train_label.txt
+    - D:\taged\tagged_vertical_3.6w\train.txt
     transforms:
     - DecodeImage:
         img_mode: BGR
@@ -109,9 +108,9 @@ Train:
 Eval:
   dataset:
     name: SimpleDataSet
-    data_dir: C:\Users\Gatsby\datasets\rec_rotate_ajust_data\
+    data_dir: D:\taged\tagged_vertical_3.6w\test
     label_file_list:
-    - C:/Users/Gatsby/datasets/rec_rotate_ajust_data/rec_test_label.txt
+    - D:\taged\tagged_vertical_3.6w\test.txt
     transforms:
     - DecodeImage:
         img_mode: BGR
