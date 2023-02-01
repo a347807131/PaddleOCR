@@ -31,6 +31,7 @@ import cv2
 import numpy as np
 from argparse import ArgumentParser, RawDescriptionHelpFormatter
 
+from myscripts import wandb_utils
 from ppocr.utils.stats import TrainingStats
 from ppocr.utils.save_load import save_model
 from ppocr.utils.utility import print_dict, AverageMeter
@@ -40,19 +41,6 @@ from ppocr.utils import profiler
 from ppocr.data import build_dataloader
 
 import wandb
-import random
-
-# start a new wandb run to track this script
-wandb.init(
-    # set the wandb project where this run will be logged
-    project="paddle-ocr",
-
-    # track hyperparameters and run metadata
-    config={
-        "model_name": "chinese_cht_PP-OCRv3_rec_train"
-    }
-)
-
 
 class ArgsParser(ArgumentParser):
     def __init__(self):
@@ -374,15 +362,8 @@ def train(config,
                     total_samples / print_batch_step,
                     total_samples / train_batch_cost, eta_sec_format)
                 logger.info(strs)
+                wandb_utils.log_stats(strs)
 
-                ## added by gatsby
-                if logs is not None:
-                    str_splits = strs.split(',')
-                    state_dict = {}
-                    for split in str_splits:
-                        kv = split.split(':')
-                        if len(kv) == 2: state_dict[kv[0]] = kv[1]
-                    wandb.log(state_dict)
 
                 total_samples = 0
                 train_reader_cost = 0.0
